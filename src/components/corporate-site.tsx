@@ -128,9 +128,9 @@ function Brand({ compact = false }: { compact?: boolean }) {
       <img
         src={logoUrl}
         alt="InfinityNow Cybersecurity"
-        width={compact ? 72 : 96}
-        height={compact ? 48 : 64}
-        className={compact ? "h-11 w-auto object-contain sm:h-14" : "h-12 w-auto object-contain sm:h-16"}
+        width={compact ? 247 : 325}
+        height={compact ? 38 : 50}
+        className={compact ? "h-9 w-auto object-contain sm:h-11 lg:h-12" : "h-10 w-auto object-contain sm:h-12"}
       />
     </a>
   );
