@@ -26,13 +26,14 @@ jobs:
       - run: bun run build
       - name: Prepare static output for GitHub Pages
         run: |
-          OUT=.output/public
-          test -f "$OUT/index.html"
+          OUT=dist/client
+          test -f "$OUT/_shell.html"
           touch "$OUT/.nojekyll"
-          cp "$OUT/index.html" "$OUT/404.html"
+          cp "$OUT/_shell.html" "$OUT/index.html"
+          cp "$OUT/_shell.html" "$OUT/404.html"
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .output/public
+          path: dist/client
 
   deploy:
     needs: build
