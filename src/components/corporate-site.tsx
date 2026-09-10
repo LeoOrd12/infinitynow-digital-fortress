@@ -30,7 +30,7 @@ import {
   Zap,
 } from "lucide-react";
 
-import logoAsset from "@/assets/infinitynow-logo.jpeg.asset.json";
+import logoUrl from "@/assets/infinitynow-logo-mark.jpeg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -126,11 +126,11 @@ function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <a href="#inicio" aria-label="InfinityNow, volver al inicio" className="block shrink-0">
       <img
-        src={logoAsset.url}
+        src={logoUrl}
         alt="InfinityNow Cybersecurity"
-        width={compact ? 188 : 238}
-        height={compact ? 55 : 70}
-        className={compact ? "h-9 w-auto object-contain" : "h-12 w-auto object-contain sm:h-14"}
+        width={compact ? 247 : 325}
+        height={compact ? 38 : 50}
+        className={compact ? "h-9 w-auto object-contain sm:h-11 lg:h-12" : "h-10 w-auto object-contain sm:h-12"}
       />
     </a>
   );
@@ -146,7 +146,7 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-xl">
-      <nav className="site-container grid h-20 grid-cols-[minmax(0,1fr)_auto] items-center gap-4" aria-label="Navegación principal">
+      <nav className="site-container grid h-20 grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:h-24" aria-label="Navegación principal">
         <Brand compact />
         <div className="hidden items-center gap-7 lg:flex">
           {navItems.map(([label, href]) => (
