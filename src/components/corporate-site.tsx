@@ -146,7 +146,7 @@ export function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-xl">
-      <nav className="site-container grid h-20 grid-cols-[minmax(0,1fr)_auto] items-center gap-4" aria-label="Navegación principal">
+      <nav className="site-container grid h-20 grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:h-24" aria-label="Navegación principal">
         <Brand compact />
         <div className="hidden items-center gap-7 lg:flex">
           {navItems.map(([label, href]) => (
