@@ -351,7 +351,7 @@ export function ContactSection() {
   );
 }
 
-function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+function Field({ label, error, children }: { label: string; error: string | undefined; children: React.ReactNode }) {
   return <label className="form-field"><span>{label}</span>{children}{error && <small role="alert">{error}</small>}</label>;
 }
 
