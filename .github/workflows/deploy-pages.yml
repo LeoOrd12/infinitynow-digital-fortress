@@ -26,11 +26,25 @@ jobs:
       - run: bun run build
       - name: Prepare static output for GitHub Pages
         run: |
+          set -e
           OUT=dist/client
-          test -f "$OUT/_shell.html"
+          echo "Contenido real de $OUT:"
+          ls -la "$OUT"
+          # TanStack Start SPA puede generar index.html prerenderizado o solo _shell.html.
+          # Usamos el que exista realmente como entrada principal.
+          if [ -f "$OUT/index.html" ]; then
+            ENTRY="$OUT/index.html"
+          elif [ -f "$OUT/_shell.html" ]; then
+            ENTRY="$OUT/_shell.html"
+            cp "$ENTRY" "$OUT/index.html"
+          else
+            echo "ERROR: ni index.html ni _shell.html existen en $OUT" >&2
+            exit 1
+          fi
+          # 404.html = misma shell SPA para que las rutas funcionen en GitHub Pages.
+          cp "$OUT/index.html" "$OUT/404.html"
           touch "$OUT/.nojekyll"
-          cp "$OUT/_shell.html" "$OUT/index.html"
-          cp "$OUT/_shell.html" "$OUT/404.html"
+          echo "Entrada usada: $ENTRY"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist/client
