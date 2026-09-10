@@ -24,30 +24,60 @@ jobs:
           bun-version: latest
       - run: bun install --frozen-lockfile
       - run: bun run build
-      - name: Prepare static output for GitHub Pages
+      - name: Inspect and prepare static output for GitHub Pages
+        id: static-output
+        shell: bash
         run: |
-          set -e
-          OUT=dist/client
-          echo "Contenido real de $OUT:"
-          ls -la "$OUT"
-          # TanStack Start SPA puede generar index.html prerenderizado o solo _shell.html.
-          # Usamos el que exista realmente como entrada principal.
-          if [ -f "$OUT/index.html" ]; then
-            ENTRY="$OUT/index.html"
-          elif [ -f "$OUT/_shell.html" ]; then
-            ENTRY="$OUT/_shell.html"
-            cp "$ENTRY" "$OUT/index.html"
-          else
-            echo "ERROR: ni index.html ni _shell.html existen en $OUT" >&2
+          set -euo pipefail
+
+          echo "Estructura generada por el build:"
+          for candidate in dist .output build; do
+            if [ -e "$candidate" ]; then
+              echo "--- $candidate ---"
+              find "$candidate" -maxdepth 3 -print | sort
+            fi
+          done
+
+          mapfile -t SHELLS < <(find dist .output build -type f \( -name '_shell.html' -o -name 'index.html' \) 2>/dev/null | sort)
+          if [ "${#SHELLS[@]}" -eq 0 ]; then
+            echo "ERROR: el build no generó _shell.html ni index.html en dist, .output o build." >&2
             exit 1
           fi
-          # 404.html = misma shell SPA para que las rutas funcionen en GitHub Pages.
+
+          ENTRY=""
+          for file in "${SHELLS[@]}"; do
+            if [ "$(basename "$file")" = "_shell.html" ]; then
+              ENTRY="$file"
+              break
+            fi
+          done
+          if [ -z "$ENTRY" ]; then
+            ENTRY="${SHELLS[0]}"
+          fi
+
+          OUT="$(dirname "$ENTRY")"
+          echo "Directorio público detectado: $OUT"
+          echo "Shell SPA detectado: $ENTRY"
+          ls -la "$OUT"
+
+          if [ "$(basename "$ENTRY")" = "_shell.html" ]; then
+            cp "$ENTRY" "$OUT/index.html"
+          fi
           cp "$OUT/index.html" "$OUT/404.html"
+
+          if [ -f public/CNAME ] && [ ! -f "$OUT/CNAME" ]; then
+            cp public/CNAME "$OUT/CNAME"
+          fi
           touch "$OUT/.nojekyll"
-          echo "Entrada usada: $ENTRY"
+
+          test -f "$OUT/index.html"
+          test -f "$OUT/404.html"
+          test -f "$OUT/CNAME"
+          test -f "$OUT/.nojekyll"
+          echo "dir=$OUT" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/client
+          path: ${{ steps.static-output.outputs.dir }}
 
   deploy:
     needs: build
