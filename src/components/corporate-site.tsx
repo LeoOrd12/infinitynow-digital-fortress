@@ -30,7 +30,7 @@ import {
   Zap,
 } from "lucide-react";
 
-import logoUrl from "@/assets/infinitynow-logo.jpeg";
+import logoUrl from "@/assets/infinitynow-logo-mark.jpeg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
