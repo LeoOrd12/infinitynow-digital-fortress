@@ -126,11 +126,11 @@ function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <a href="#inicio" aria-label="InfinityNow, volver al inicio" className="block shrink-0">
       <img
-        src={logoAsset.url}
+        src={logoUrl}
         alt="InfinityNow Cybersecurity"
-        width={compact ? 188 : 238}
-        height={compact ? 55 : 70}
-        className={compact ? "h-9 w-auto object-contain" : "h-12 w-auto object-contain sm:h-14"}
+        width={compact ? 72 : 96}
+        height={compact ? 48 : 64}
+        className={compact ? "h-11 w-auto object-contain sm:h-14" : "h-12 w-auto object-contain sm:h-16"}
       />
     </a>
   );
